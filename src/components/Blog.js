@@ -11,24 +11,32 @@ const Blog = ({blog}) => {
         marginBottom: 5
     }
 
+    const likeStyle ={
+        backgroundColor: 'lime'
+    }
+
+    const deleteStyle = {
+        backgroundColor: 'salmon'
+    }
+
     return (
         <div>
-        {
-            showAll === false ?
+        {showAll === false ?
             <div style = {blogStyle}>
                 Content: {blog.title} <button type='show' onClick={()=>setShowAll(!showAll)}>view</button>
             </div> :
-            <div>
-    Author: {blog.author}
-    <div></div>
-    Url: {blog.url}
-    <div></div>
-    Likes: {blog.likes} <button type='like'>like</button>
-    <div></div>
-                <button type='show' onClick={()=>setShowAll(!showAll)}>hide</button>
+            <div>Author: {blog.author}
+                <div></div>
+                Url: {blog.url}
+                <div></div>
+                Likes: {blog.likes} <button type='like' style={likeStyle}>like</button>
+                <div></div>
+                <button type='show' onClick={()=>setShowAll(!showAll)}>hide post</button>
+                <div></div>
+                <button type='delete' style={deleteStyle}>delete post</button>
             </div>
         }
-</div>
+        </div>
     )
 }
 
