@@ -22,8 +22,16 @@ const create = async newObject => {
 }
 
 const update = (id, newObject) => {
-  const request = axios.put(`${ baseUrl } /${id}`, newObject)
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken }
+const deleteBlog = async (id) => {
+  if(window.confirm('Sure you wanna delete this blog?')) {
+    const request = await axios.delete(`${baseUrl}/${id}`)
+  } else {
+    window.alert("Didn't delete blog.")
+  }
+}
+
+export default { getAll, create, update, setToken , deleteBlog }

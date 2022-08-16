@@ -13,12 +13,12 @@ const App = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
-    const [loginVisible, setLoginVisible] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
     const blogFormRef = useRef()
 
+    const descendingLikes = [...blogs].sort((a,b) => b.likes - a.likes)
 
-  useEffect(() => {
+    useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
@@ -82,6 +82,43 @@ const App = () => {
         })
   }
 
+  const likeBlog = (event) => {
+        const idToChange = event.target.value
+
+      const blogToChange = {
+            title: event.target.title,
+          author: event.target.name,
+
+      }
+
+        blogService
+            .update(idToChange, blogToChange)
+            .then(() => {
+                setBlogs(blogs.map(p =>{
+                    return p
+                }))
+            })
+  }
+
+  const handleDelete = (event) => {
+        const idToDelete = event.target.value
+
+      blogService
+          .deleteBlog(idToDelete)
+          .then((blogs => {
+              setBlogs(blogs)
+          }))
+      blogService
+          .getAll()
+          .then(blogs => {
+              setBlogs(blogs)
+              setErrorMessage(`Deleted blog id ${idToDelete}.`)
+              setTimeout(()=>{
+                  setErrorMessage(null)
+              },5000)
+          })
+    }
+
   return (
     <div>
         <h1>Notes</h1>
@@ -107,8 +144,8 @@ const App = () => {
 
       <h1>Blogs</h1>
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {descendingLikes.map(blog =>
+        <Blog key={blog.id} blog={blog} handleDelete={handleDelete} user={user} likeBlog={likeBlog}/>
       )}
     </div>
   )
