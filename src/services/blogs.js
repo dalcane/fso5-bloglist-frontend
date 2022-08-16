@@ -30,7 +30,7 @@ const deleteBlog = async (id) => {
   if(window.confirm('Sure you wanna delete this blog?')) {
     const request = await axios.delete(`${baseUrl}/${id}`)
   } else {
-    window.alert("Didn't delete blog.")
+    window.alert('Didn\'t delete blog.')
   }
 }
 

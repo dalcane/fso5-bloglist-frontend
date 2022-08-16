@@ -1,24 +1,24 @@
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Notification from "./components/Notification"
+import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import Toggleable from "./components/Toggleable";
-import BlogForm from "./components/BlogForm";
+import Toggleable from './components/Toggleable'
+import BlogForm from './components/BlogForm'
 
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
-    const [errorMessage, setErrorMessage] = useState(null)
-    const blogFormRef = useRef()
+  const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const blogFormRef = useRef()
 
-    const descendingLikes = [...blogs].sort((a,b) => b.likes - a.likes)
+  const descendingLikes = [...blogs].sort((a,b) => b.likes - a.likes)
 
-    useEffect(() => {
+  useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
@@ -40,7 +40,7 @@ const App = () => {
         username, password,
       })
       window.localStorage.setItem(
-          'loggedNoteappUser', JSON.stringify(user)
+        'loggedNoteappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
@@ -66,81 +66,81 @@ const App = () => {
 
   const addBlog = (blogObject) => {
     blogService
-        .create(blogObject)
-        .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))
-            setErrorMessage(`New blog successfully added by ${user.name}`)
-            setTimeout(()=>{
-                setErrorMessage(null)
-            },5000)
-        })
-        .catch(error => {
-            setErrorMessage(JSON.stringify(error.response.data))
-            setTimeout(()=>{
-                setErrorMessage(null)
-            },5000)
-        })
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setErrorMessage(`New blog successfully added by ${user.name}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        },5000)
+      })
+      .catch(error => {
+        setErrorMessage(JSON.stringify(error.response.data))
+        setTimeout(() => {
+          setErrorMessage(null)
+        },5000)
+      })
   }
 
   const likeBlog = (event) => {
-        const idToChange = event.target.value
+    const idToChange = event.target.value
 
-      const blogToChange = {
-            title: event.target.title,
-          author: event.target.name,
+    const blogToChange = {
+      title: event.target.title,
+      author: event.target.name,
 
-      }
+    }
 
-        blogService
-            .update(idToChange, blogToChange)
-            .then(() => {
-                setBlogs(blogs.map(p =>{
-                    return p
-                }))
-            })
+    blogService
+      .update(idToChange, blogToChange)
+      .then(() => {
+        setBlogs(blogs.map(p => {
+          return p
+        }))
+      })
   }
 
   const handleDelete = (event) => {
-        const idToDelete = event.target.value
+    const idToDelete = event.target.value
 
-      blogService
-          .deleteBlog(idToDelete)
-          .then((blogs => {
-              setBlogs(blogs)
-          }))
-      blogService
-          .getAll()
-          .then(blogs => {
-              setBlogs(blogs)
-              setErrorMessage(`Deleted blog id ${idToDelete}.`)
-              setTimeout(()=>{
-                  setErrorMessage(null)
-              },5000)
-          })
-    }
+    blogService
+      .deleteBlog(idToDelete)
+      .then((blogs => {
+        setBlogs(blogs)
+      }))
+    blogService
+      .getAll()
+      .then(blogs => {
+        setBlogs(blogs)
+        setErrorMessage(`Deleted blog id ${idToDelete}.`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        },5000)
+      })
+  }
 
   return (
     <div>
-        <h1>Notes</h1>
-        <Notification message={errorMessage} />
+      <h1>Notes</h1>
+      <Notification message={errorMessage} />
 
-        {user === null ?
-            <Toggleable buttonLabel='login'>
-                <LoginForm
-                    username={username}
-                    password={password}
-                    handleUsernameChange={({ target }) => setUsername(target.value)}
-                    handlePasswordChange={({ target }) => setPassword(target.value)}
-                    handleSubmit={handleLogin}
-                />
-            </Toggleable> :
-            <div>
-                <p>{user.name} logged in <button type='logout' onClick={handleLogout} >logout</button></p>
-                <Toggleable buttonLabel="new blog" ref={blogFormRef}>
-                    <BlogForm createBlog={addBlog} />
-                </Toggleable>
-            </div>
-        }
+      {user === null ?
+        <Toggleable buttonLabel='login'>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+        </Toggleable> :
+        <div>
+          <p>{user.name} logged in <button type='logout' onClick={handleLogout} >logout</button></p>
+          <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+          </Toggleable>
+        </div>
+      }
 
       <h1>Blogs</h1>
 
