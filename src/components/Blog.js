@@ -26,11 +26,14 @@ const Blog = ({ blog , handleDelete, user, likeBlog }) => {
         <div style = {blogStyle}>
                 Content: {blog.title} <button type='show' onClick={() => setShowAll(!showAll)}>view</button>
         </div> :
-        <div>Author: {blog.author}
+        <div style={blogStyle}>
+          Content: {blog.title}
+          <div></div>
+          Author: {blog.author}
           <div></div>
                 Url: {blog.url}
           <div></div>
-                Likes: {blog.likes} <button type='like' style={likeStyle} value={blog.id} name={blog.author} title={blog.title} onClick={likeBlog}>like</button>
+                Likes: {blog.likes} <button type='like' style={likeStyle} value={blog.id} name={blog.author} title={blog.likes} onClick={likeBlog}>like</button>
           <div></div>
           <button type='show' onClick={() => setShowAll(!showAll)}>hide post</button>
           <div></div>

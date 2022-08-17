@@ -28,7 +28,7 @@ const update = (id, newObject) => {
 
 const deleteBlog = async (id) => {
   if(window.confirm('Sure you wanna delete this blog?')) {
-    const request = await axios.delete(`${baseUrl}/${id}`)
+    await axios.delete(`${baseUrl}/${id}`)
   } else {
     window.alert('Didn\'t delete blog.')
   }

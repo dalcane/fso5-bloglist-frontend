@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Toggleable from './components/Toggleable'
 import BlogForm from './components/BlogForm'
+import Footer from './components/Footer'
 
 
 const App = () => {
@@ -86,9 +87,7 @@ const App = () => {
     const idToChange = event.target.value
 
     const blogToChange = {
-      title: event.target.title,
-      author: event.target.name,
-
+      likes: parseInt(event.target.title, 10) +1,
     }
 
     blogService
@@ -105,9 +104,6 @@ const App = () => {
 
     blogService
       .deleteBlog(idToDelete)
-      .then((blogs => {
-        setBlogs(blogs)
-      }))
     blogService
       .getAll()
       .then(blogs => {
@@ -121,7 +117,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Notes</h1>
+      <h1>BlogApp</h1>
       <Notification message={errorMessage} />
 
       {user === null ?
@@ -147,6 +143,8 @@ const App = () => {
       {descendingLikes.map(blog =>
         <Blog key={blog.id} blog={blog} handleDelete={handleDelete} user={user} likeBlog={likeBlog}/>
       )}
+
+      <Footer />
     </div>
   )
 }
